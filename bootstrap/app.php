@@ -91,6 +91,8 @@ $app->singleton(
 |
 */
 
+$app->register(Wn\Generators\CommandsServiceProvider::class);
+
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {

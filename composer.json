@@ -6,7 +6,9 @@
     "type": "project",
     "require": {
         "php": ">=7.1.3",
-        "laravel/lumen-framework": "5.8.*"
+        "baidu/aip-sdk": "^2.2",
+        "laravel/lumen-framework": "5.8.*",
+        "wn/lumen-generators": "^1.3"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
