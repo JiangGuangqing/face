@@ -86,7 +86,6 @@ class IndexController extends Controller
                     $race = 4;
                     break;
             }
-            return $res['result']['face_list'][0]['age'];
             //记录用户
             User::firstOrCreate(
                 ['user_id' => $userId],
@@ -96,68 +95,68 @@ class IndexController extends Controller
                     'race' => $race
                 ]
             );
-//
-//            $glasses = '';
-//            switch ($res['result']['face_list'][0]['glasses']['type']) {
-//                case 'none':
-//                    $glasses = 1;
-//                    break;
-//                case 'common':
-//                    $glasses = 2;
-//                    break;
-//                case 'sun':
-//                    $glasses = 3;
-//                    break;
-//            }
-//
-//            $emotion = '';
-//            switch ($res['result']['face_list'][0]['emotion']['type']) {
-//                case 'angry':
-//                    $emotion = 1;
-//                    break;
-//                case 'disgust':
-//                    $emotion = 2;
-//                    break;
-//                case 'fear':
-//                    $emotion = 3;
-//                    break;
-//                case 'happy':
-//                    $emotion = 4;
-//                    break;
-//                case 'sad':
-//                    $emotion = 5;
-//                    break;
-//                case 'surprise':
-//                    $emotion = 6;
-//                    break;
-//                case 'neutral':
-//                    $emotion = 7;
-//                    break;
-//            }
-//
-//            $expression = '';
-//            switch ($res['result']['face_list'][0]['expression']['type']) {
-//                case 'none':
-//                    $glasses = 1;
-//                    break;
-//                case 'smile':
-//                    $glasses = 2;
-//                    break;
-//                case 'laugh':
-//                    $glasses = 3;
-//                    break;
-//            }
-//
-//            //记录用户脸部信息
-//            Face::create([
-//                'user_id' => $userId,
-//                'face_token' => $res['result']['face_list'][0]['face_token'],
-//                'img' => $image,
-//                'glasses' => $glasses,
-//                'emotion' => $emotion,
-//                'expression' => $expression,
-//                'beauty' => $res['result']['face_list'][0]['beauty']
-//            ]);
+
+            $glasses = '';
+            switch ($res['result']['face_list'][0]['glasses']['type']) {
+                case 'none':
+                    $glasses = 1;
+                    break;
+                case 'common':
+                    $glasses = 2;
+                    break;
+                case 'sun':
+                    $glasses = 3;
+                    break;
+            }
+
+            $emotion = '';
+            switch ($res['result']['face_list'][0]['emotion']['type']) {
+                case 'angry':
+                    $emotion = 1;
+                    break;
+                case 'disgust':
+                    $emotion = 2;
+                    break;
+                case 'fear':
+                    $emotion = 3;
+                    break;
+                case 'happy':
+                    $emotion = 4;
+                    break;
+                case 'sad':
+                    $emotion = 5;
+                    break;
+                case 'surprise':
+                    $emotion = 6;
+                    break;
+                case 'neutral':
+                    $emotion = 7;
+                    break;
+            }
+
+            $expression = '';
+            switch ($res['result']['face_list'][0]['expression']['type']) {
+                case 'none':
+                    $glasses = 1;
+                    break;
+                case 'smile':
+                    $glasses = 2;
+                    break;
+                case 'laugh':
+                    $glasses = 3;
+                    break;
+            }
+
+            //记录用户脸部信息
+            Face::create([
+                'user_id' => $userId,
+                'face_token' => $res['result']['face_list'][0]['face_token'],
+                'img' => $image,
+                'glasses' => $glasses,
+                'emotion' => $emotion,
+                'expression' => $expression,
+                'beauty' => $res['result']['face_list'][0]['beauty']
+            ]);
         }
         return 'SUCCESS';
 
