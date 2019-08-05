@@ -11,5 +11,6 @@
 |
 */
 
-$router->get('/', 'IndexController@index');
+$router->get('/detect', 'IndexController@detect');
+$router->get('/show', 'IndexController@show');
 

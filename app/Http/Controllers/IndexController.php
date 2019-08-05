@@ -12,7 +12,7 @@ class IndexController extends Controller
     const SECRET_KEY = 'tOHKpERVcV6L7kosG8umDTvMYWzNQBGH';
 
 
-    public function index()
+    public function detect()
     {
         $client = new AipFace(self::APP_ID, self::API_KEY, self::SECRET_KEY);
 
