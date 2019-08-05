@@ -15,7 +15,7 @@ class CreateFacesTable extends Migration
     {
         Schema::create('faces', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->string('user_id');
             $table->string('face_token');
             $table->tinyInteger('glasses');
             $table->tinyInteger('emotion');

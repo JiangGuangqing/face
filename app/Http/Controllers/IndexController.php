@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use AipFace;
+use App\Models\Face;
+use App\Models\User;
 
 class IndexController extends Controller
 {
@@ -25,11 +27,32 @@ class IndexController extends Controller
      * */
     public function detect()
     {
-        $image = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564993899516&di=b6681c8cd3183311c8fe286e953d7aec&imgtype=0&src=http%3A%2F%2Fdingyue.ws.126.net%2F2019%2F04%2F03%2Fff20d9986bc6433d936107521d13add1.jpeg";
+        $image = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565004566931&di=a536ca86d19d86ae0c7602100f1b266a&imgtype=0&src=http%3A%2F%2Fp0.qhimgs4.com%2Ft017bd393916935be8e.jpg";
+
+        $imageType = "URL";
+
+        $groupId = "8_21";
 
         $client = new AipFace(self::APP_ID, self::API_KEY, self::SECRET_KEY);
 
-        $imageType = "URL";
+        //跟现有的人脸库进行比对
+        $searchResult = $client->search($image, $imageType, $groupId);
+
+        if ($searchResult['error_code'] == '222207') {
+            //未检测到人脸注册人脸
+            $userId = uniqid();
+            $client->addUser($image, $imageType, $groupId, $userId);
+        } else {
+            //匹配度85% 一下的算新用户注册人脸
+            $score = (int)$searchResult['result']['user_list'][0]['score'];
+            if ($score < 85) {
+                $userId = uniqid();
+                $client->addUser($image, $imageType, $groupId, $userId);
+            } else {
+                //匹配用户获取 userId
+                $userId = $searchResult['result']['user_list'][0]['user_id'];
+            }
+        };
 
         $options = array();
         $options["face_field"] = "age,beauty,expression,gender,glasses,race,emotion";
@@ -40,7 +63,104 @@ class IndexController extends Controller
         // 带参数调用人脸检测
         $res = $client->detect($image, $imageType, $options);
 
-        return $res['result'];
+        if ($res['error_code'] == 0) {
+
+            if ($res['result']['face_list'][0]['gender']['type'] == 'male') {
+                $gender = 1;
+            } else {
+                $gender = 2;
+            }
+
+            $race = '';
+            switch ($res['result']['face_list'][0]['race']['type']) {
+                case 'yellow':
+                    $race = 1;
+                    break;
+                case 'white':
+                    $race = 2;
+                    break;
+                case 'black':
+                    $race = 3;
+                    break;
+                case 'arabs':
+                    $race = 4;
+                    break;
+            }
+            return $res['result']['face_list'][0]['age'];
+            //记录用户
+            User::firstOrCreate(
+                ['user_id' => $userId],
+                [
+                    'age' => $res['result']['face_list'][0]['age'],
+                    'gender' => $gender,
+                    'race' => $race
+                ]
+            );
+//
+//            $glasses = '';
+//            switch ($res['result']['face_list'][0]['glasses']['type']) {
+//                case 'none':
+//                    $glasses = 1;
+//                    break;
+//                case 'common':
+//                    $glasses = 2;
+//                    break;
+//                case 'sun':
+//                    $glasses = 3;
+//                    break;
+//            }
+//
+//            $emotion = '';
+//            switch ($res['result']['face_list'][0]['emotion']['type']) {
+//                case 'angry':
+//                    $emotion = 1;
+//                    break;
+//                case 'disgust':
+//                    $emotion = 2;
+//                    break;
+//                case 'fear':
+//                    $emotion = 3;
+//                    break;
+//                case 'happy':
+//                    $emotion = 4;
+//                    break;
+//                case 'sad':
+//                    $emotion = 5;
+//                    break;
+//                case 'surprise':
+//                    $emotion = 6;
+//                    break;
+//                case 'neutral':
+//                    $emotion = 7;
+//                    break;
+//            }
+//
+//            $expression = '';
+//            switch ($res['result']['face_list'][0]['expression']['type']) {
+//                case 'none':
+//                    $glasses = 1;
+//                    break;
+//                case 'smile':
+//                    $glasses = 2;
+//                    break;
+//                case 'laugh':
+//                    $glasses = 3;
+//                    break;
+//            }
+//
+//            //记录用户脸部信息
+//            Face::create([
+//                'user_id' => $userId,
+//                'face_token' => $res['result']['face_list'][0]['face_token'],
+//                'img' => $image,
+//                'glasses' => $glasses,
+//                'emotion' => $emotion,
+//                'expression' => $expression,
+//                'beauty' => $res['result']['face_list'][0]['beauty']
+//            ]);
+        }
+        return 'SUCCESS';
+
     }
 
 }
