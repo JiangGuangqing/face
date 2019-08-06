@@ -27,7 +27,7 @@ class IndexController extends Controller
      * */
     public function detect()
     {
-        $image = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565004566931&di=a536ca86d19d86ae0c7602100f1b266a&imgtype=0&src=http%3A%2F%2Fp0.qhimgs4.com%2Ft017bd393916935be8e.jpg";
+        $image = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565062568959&di=3f5e1a4d2f987601375ae9ebdddff1eb&imgtype=0&src=http%3A%2F%2Fimages.china.cn%2Fattachement%2Fjpg%2Fsite1000%2F20101213%2F002564bb1f430e6faa7553.jpg";
 
         $imageType = "URL";
 
@@ -137,13 +137,13 @@ class IndexController extends Controller
             $expression = '';
             switch ($res['result']['face_list'][0]['expression']['type']) {
                 case 'none':
-                    $glasses = 1;
+                    $expression = 1;
                     break;
                 case 'smile':
-                    $glasses = 2;
+                    $expression = 2;
                     break;
                 case 'laugh':
-                    $glasses = 3;
+                    $expression = 3;
                     break;
             }
 
