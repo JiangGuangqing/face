@@ -11,6 +11,7 @@
 |
 */
 
-$router->get('/detect', 'IndexController@detect');
+$router->post('/detect', 'IndexController@detect');
+$router->post('/heart', 'IndexController@heart');
 $router->get('/show', 'IndexController@show');
 

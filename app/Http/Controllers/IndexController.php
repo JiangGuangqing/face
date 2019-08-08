@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use AipFace;
 use App\Models\Face;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
@@ -24,12 +26,14 @@ class IndexController extends Controller
      *  情绪（愤怒，厌恶，恐惧，高兴，伤心，惊讶，无情绪）
      *  表情（不笑，微笑，大笑）
      *  美丑打分（数值越大越俊）
-     * */
-    public function detect()
+            * */
+    public function detect(Request $request)
     {
-        $image = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565062568959&di=3f5e1a4d2f987601375ae9ebdddff1eb&imgtype=0&src=http%3A%2F%2Fimages.china.cn%2Fattachement%2Fjpg%2Fsite1000%2F20101213%2F002564bb1f430e6faa7553.jpg";
+        $data =  $request->all();
+        Log::info(json_encode($data));
+        $image = $data['faces'][0]['face_img'];
 
-        $imageType = "URL";
+        $imageType = "BASE64";
 
         $groupId = "8_21";
 
@@ -45,7 +49,7 @@ class IndexController extends Controller
         } else {
             //匹配度85% 一下的算新用户注册人脸
             $score = (int)$searchResult['result']['user_list'][0]['score'];
-            if ($score < 85) {
+            if ($score < 60) {
                 $userId = uniqid();
                 $client->addUser($image, $imageType, $groupId, $userId);
             } else {
@@ -57,11 +61,26 @@ class IndexController extends Controller
         $options = array();
         $options["face_field"] = "age,beauty,expression,gender,glasses,race,emotion";
         $options["max_face_num"] = 1;
-        $options["face_type"] = "LIVE";
-        $options["liveness_control"] = "LOW";
+        $options["face_type"] = "CERT";
+        $options["liveness_control"] = "NONE";
 
         // 带参数调用人脸检测
         $res = $client->detect($image, $imageType, $options);
+        Log::info($searchResult);
+        Log::info($res);
+
+        //存储人脸照片
+
+        $fileName = time().rand(100000,999999).'.jpg';
+        Log::info($fileName);
+
+        // 设置图片本地保存路劲
+        $path = "../resources/upload";
+
+        $imageSrc= $path."/". $fileName; //图片名字
+
+        file_put_contents($imageSrc, base64_decode($image));//返回的是字节数
+
 
         if ($res['error_code'] == 0) {
 
@@ -151,15 +170,22 @@ class IndexController extends Controller
             Face::create([
                 'user_id' => $userId,
                 'face_token' => $res['result']['face_list'][0]['face_token'],
-                'img' => $image,
+                'img' => $fileName,
                 'glasses' => $glasses,
                 'emotion' => $emotion,
                 'expression' => $expression,
                 'beauty' => $res['result']['face_list'][0]['beauty']
             ]);
         }
-        return 'SUCCESS';
+        return [];
 
+    }
+
+    /*
+     * 心跳数据
+     * */
+    public function heart(Request $request){
+        return [];
     }
 
 }
