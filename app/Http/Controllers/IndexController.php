@@ -188,4 +188,56 @@ class IndexController extends Controller
         return [];
     }
 
+
+    /*
+     * 数据展示
+     *{
+    "sex": [{
+       "field": "male",
+       "value": "123"
+      },
+      {
+       "field": "female",
+       "value": "321"
+      }
+     ],
+     "age": [{
+       "field": "10",
+       "value": "123"
+      },
+      {
+       "field": "20",
+       "value": "123"
+      },
+      {
+       "field": "30",
+       "value": "123"
+      },
+      {
+       "field": "40",
+       "value": "123"
+      },
+      {
+       "field": "50",
+       "value": "123"
+      },
+      {
+       "field": "60",
+       "value": "123"
+      },
+      {
+       "field": "150",
+       "value": "0"
+      }
+     ],
+     "visitorNum": 666,
+     "visitTimes": 888,
+     "revisitRate": "2.23%",
+     "visitLength": "5.5分钟",
+     "satisfaction": "90%"
+    }
+     * */
+    public function show(){
+
+    }
 }
