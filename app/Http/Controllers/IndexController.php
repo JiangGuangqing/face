@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 class IndexController extends Controller
 {
 
-    const APP_ID = '16951142';
-    const API_KEY = 'd45ebCQozLbh4l7XhDa5vl07';
-    const SECRET_KEY = 'tOHKpERVcV6L7kosG8umDTvMYWzNQBGH';
+    const APP_ID = '16980453';
+    const API_KEY = 'bpxgFGqq210OFPpRD08mvkZz';
+    const SECRET_KEY = 'APpoxD0QTF5Wm4VoPAFN6hBeHg30Gu4F';
 
     /*
      * 用户信息采集
