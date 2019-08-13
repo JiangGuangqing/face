@@ -201,8 +201,6 @@ class IndexController extends Controller
         $data['visitTimesTotal'] = $faceNum;
         $data['visitTimesToday'] = Face::where('created_at','like',"$today%")->count();
         $data['revisitRate'] = round($userNum/$faceNum*100);
-        $data['booksNum'] = 500;
-        $data['dataSize'] = '384TB';
         $data['currTime'] = date('Y年m月d日 H:i');
 
         $maleNum = User::where('gender',1)->count();
