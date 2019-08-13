@@ -29,7 +29,7 @@ class IndexController extends Controller
             * */
     public function detect(Request $request)
     {
-        $data =  $request->all();
+        $data = $request->all();
         Log::info(json_encode($data));
         $image = $data['faces'][0]['face_img'];
 
@@ -71,13 +71,13 @@ class IndexController extends Controller
 
         //存储人脸照片
 
-        $fileName = time().rand(100000,999999).'.jpg';
+        $fileName = time() . rand(100000, 999999) . '.jpg';
         Log::info($fileName);
 
         // 设置图片本地保存路劲
         $path = "../resources/upload";
 
-        $imageSrc= $path."/". $fileName; //图片名字
+        $imageSrc = $path . "/" . $fileName; //图片名字
 
         file_put_contents($imageSrc, base64_decode($image));//返回的是字节数
 
@@ -184,60 +184,44 @@ class IndexController extends Controller
     /*
      * 心跳数据
      * */
-    public function heart(Request $request){
+    public function heart(Request $request)
+    {
         return [];
     }
 
 
     /*
      * 数据展示
-     *{
-    "sex": [{
-       "field": "male",
-       "value": "123"
-      },
-      {
-       "field": "female",
-       "value": "321"
-      }
-     ],
-     "age": [{
-       "field": "10",
-       "value": "123"
-      },
-      {
-       "field": "20",
-       "value": "123"
-      },
-      {
-       "field": "30",
-       "value": "123"
-      },
-      {
-       "field": "40",
-       "value": "123"
-      },
-      {
-       "field": "50",
-       "value": "123"
-      },
-      {
-       "field": "60",
-       "value": "123"
-      },
-      {
-       "field": "150",
-       "value": "0"
-      }
-     ],
-     "visitorNum": 666,
-     "visitTimes": 888,
-     "revisitRate": "2.23%",
-     "visitLength": "5.5分钟",
-     "satisfaction": "90%"
-    }
      * */
-    public function show(){
+    public function show()
+    {
+        $faceNum = Face::count();
+        $userNum = User::count();
+        $today = date('Y-m-d');
+        $data['visitTimesTotal'] = $faceNum;
+        $data['visitTimesToday'] = Face::where('created_at','like',"$today%")->count();
+        $data['revisitRate'] = round($userNum/$faceNum*100);
+        $data['booksNum'] = 500;
+        $data['dataSize'] = '384TB';
+        $data['eventNum'] = '23';
+        $data['currTime'] = date('Y年m月d日 H:i');
+
+        $maleNum = User::where('gender',1)->count();
+        $femaleNum = User::where('gender',2)->count();
+        $data['sex'][0]['field'] = 'male';
+        $data['sex'][0]['value'] = round($maleNum/$userNum*100);
+        $data['sex'][1]['field'] = 'female';
+        $data['sex'][1]['value'] = 100-round($maleNum/$userNum*100);
+
+        $childNum = User::where('age','<','18')->count();
+        $oldNum = User::where('age','>=','55')->count();
+        $data['age'][0]['field'] = 'child';
+        $data['age'][1]['field'] = 'young';
+        $data['age'][2]['field'] = 'old';
+        $data['age'][0]['value'] = round($childNum/$userNum*100);
+        $data['age'][2]['value'] = round($oldNum/$userNum*100);
+        $data['age'][1]['value'] = 100-round($childNum/$userNum*100)-round($oldNum/$userNum*100);
+        return $data;
 
     }
 }
