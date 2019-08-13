@@ -203,7 +203,6 @@ class IndexController extends Controller
         $data['revisitRate'] = round($userNum/$faceNum*100);
         $data['booksNum'] = 500;
         $data['dataSize'] = '384TB';
-        $data['eventNum'] = '23';
         $data['currTime'] = date('Y年m月d日 H:i');
 
         $maleNum = User::where('gender',1)->count();
