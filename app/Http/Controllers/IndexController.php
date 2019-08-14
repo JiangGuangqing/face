@@ -212,9 +212,9 @@ class IndexController extends Controller
 
         $childNum = User::where('age','<','18')->count();
         $oldNum = User::where('age','>=','55')->count();
-        $data['age'][0]['field'] = '儿童';
-        $data['age'][1]['field'] = '少中青年';
-        $data['age'][2]['field'] = '老人';
+        $data['age'][0]['name'] = '儿童';
+        $data['age'][1]['name'] = '少中青年';
+        $data['age'][2]['name'] = '老人';
         $data['age'][0]['value'] = round($childNum/$userNum*100);
         $data['age'][2]['value'] = round($oldNum/$userNum*100);
         $data['age'][1]['value'] = 100-round($childNum/$userNum*100)-round($oldNum/$userNum*100);
