@@ -205,16 +205,16 @@ class IndexController extends Controller
 
         $maleNum = User::where('gender',1)->count();
         $femaleNum = User::where('gender',2)->count();
-        $data['sex'][0]['field'] = 'male';
+        $data['sex'][0]['name'] = '男性';
         $data['sex'][0]['value'] = round($maleNum/$userNum*100);
-        $data['sex'][1]['field'] = 'female';
+        $data['sex'][1]['name'] = '女性';
         $data['sex'][1]['value'] = 100-round($maleNum/$userNum*100);
 
         $childNum = User::where('age','<','18')->count();
         $oldNum = User::where('age','>=','55')->count();
-        $data['age'][0]['field'] = 'child';
-        $data['age'][1]['field'] = 'young';
-        $data['age'][2]['field'] = 'old';
+        $data['age'][0]['field'] = '儿童';
+        $data['age'][1]['field'] = '少中青年';
+        $data['age'][2]['field'] = '老人';
         $data['age'][0]['value'] = round($childNum/$userNum*100);
         $data['age'][2]['value'] = round($oldNum/$userNum*100);
         $data['age'][1]['value'] = 100-round($childNum/$userNum*100)-round($oldNum/$userNum*100);
